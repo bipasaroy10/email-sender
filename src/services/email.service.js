@@ -2,7 +2,7 @@ const transporter = require("../config/mail.config");
 const fs = require("fs");
 const path = require("path");
 
-const sendEmail = async ({ to, subject, message }) => {
+const sendEmail = async ({ to, subject, message, attachment }) => {
 
     const templatePath = path.join(
         __dirname,
@@ -19,12 +19,20 @@ const sendEmail = async ({ to, subject, message }) => {
         message
     );
 
-    const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to,
-        subject,
-        html: htmlTemplate
-    };
+   const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to,
+    subject,
+    html: htmlTemplate,
+    attachments: attachment
+        ? [
+            {
+                filename: attachment.originalname,
+                path: attachment.path
+            }
+        ]
+        : []
+};
 
     return await transporter.sendMail(mailOptions);
 };

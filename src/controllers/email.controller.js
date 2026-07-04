@@ -4,15 +4,11 @@ const sendMail = async (req, res) => {
     try {
         const { to, subject, message } = req.body;
 
-        // Validation
-        if (!to || !subject || !message) {
-            return res.status(400).json({
-                success: false,
-                message: "All fields are required."
-            });
-        }
+        const attachment = req.file;
 
-        await sendEmail({ to, subject, message });
+        
+
+        await sendEmail({ to, subject, message, attachment });
 
         return res.status(200).json({
             success: true,
