@@ -1,6 +1,6 @@
 const { sendEmail } = require("../services/email.service");
 
-const sendMail = async (req, res) => {
+const sendMail = async (req, res, next) => {
     try {
         const { to, subject, message } = req.body;
 
@@ -16,15 +16,8 @@ const sendMail = async (req, res) => {
         });
 
     } catch (error) {
-
-        console.error(error);
-
-        return res.status(500).json({
-            success: false,
-            message: "Failed to send email.",
-            error: error.message
-        });
-    }
+    next(error);
+}
 };
 
 module.exports = { sendMail };

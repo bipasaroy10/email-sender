@@ -1,6 +1,7 @@
 const transporter = require("../config/mail.config");
 const fs = require("fs");
 const path = require("path");
+const logger = require("../utils/logger.js");
 
 const sendEmail = async ({ to, subject, message, attachment }) => {
 
@@ -34,7 +35,26 @@ const sendEmail = async ({ to, subject, message, attachment }) => {
         : []
 };
 
-    return await transporter.sendMail(mailOptions);
+    try {
+    const info = await transporter.sendMail(mailOptions);
+
+    logger.info(
+        `Email sent successfully | To: ${to} | Subject: ${subject}`
+    );
+
+    return info;
+
+} catch (error) {
+
+    logger.error(
+        `Email failed | To: ${to} | Reason: ${error.message}`
+    );
+
+    const customError = new Error("Failed to send email.");
+customError.statusCode = 500;
+
+throw customError;
+}
 };
 
 module.exports = { sendEmail };
