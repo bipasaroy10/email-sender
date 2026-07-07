@@ -6,7 +6,6 @@ const errorHandler = require("./middlewares/error.middleware.js");
 const emailRoutes = require("./routes/email.routes");
 
 const app = express();
-app.use(errorHandler);
 
 app.use(cors());
 app.use(express.json());
@@ -20,5 +19,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/email", emailRoutes);
+
+app.use(errorHandler);   // ← moved to the end
 
 module.exports = app;

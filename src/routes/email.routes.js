@@ -2,17 +2,33 @@ const express = require("express");
 
 const router = express.Router();
 
-const upload = require("../middlewares/upload.middleware.js");
+const upload = require("../middlewares/upload.middleware");
+const validateEmailRequest = require("../middlewares/validation.middleware");
 
-const { sendMail } = require("../controllers/email.controller.js");
+const {
+    sendMail,
+    verifyOtp,
+    getEmailHistory
+} = require("../controllers/email.controller");
 
-const validateEmailRequest = require("../middlewares/validation.middleware.js");
-
+// Send Email
 router.post(
     "/send",
-    validateEmailRequest,
     upload.single("attachment"),
+    validateEmailRequest,
     sendMail
+);
+
+// Verify OTP
+router.post(
+    "/verify-otp",
+    verifyOtp
+);
+
+// no of emails sent
+router.get(
+    "/history",
+    getEmailHistory
 );
 
 module.exports = router;
